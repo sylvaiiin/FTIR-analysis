@@ -15,7 +15,6 @@ Install the following packages if that is not already done
 ### Run DataTreatment_FTIR.R
 Run DataTreatment_FTIR.R to begin the selection and analysis process
 
-## Good to know
 ### Data type
 This script use **.brut** or **.csv** data coming from FTIR.
 
