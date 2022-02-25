@@ -44,10 +44,10 @@ Normalise = function(SB,pas) {
   return (Norm) }
 
 #################################################################################
-# Demande à l'utilisateur quelles donnéesil veut supprimer
+# Demande a l'utilisateur quelles donnees il veut supprimer
 Suppression <- function(SN){
   
-  Supr <- readline(prompt='Quel échantillon voulez-vous éliminer ? ("q" pour quitter): ')
+  Supr <- readline(prompt='Quel echantillon voulez-vous eliminer ? ("q" pour quitter): ')
   Supr <- tolower(Supr)
   if (Supr == "q"){
     
@@ -67,15 +67,15 @@ Suppression <- function(SN){
   }
   
   else{
-    cat("Il faut rentrer un nom d'échantillon ou aucun !!!")
+    cat("Il faut rentrer un nom d'echantillon ou aucun !!!")
     SN <- Suppression(SN)
   }
   return(SN)
 }
 
 Sauvegarde <- function(){
-  demande <- readline(paste0("Voulez-vous enregistrer les données élaguées en .csv/n",
-                             "! Attention à ne pas overrun d'anciens fichiers ! (Oui ou Non) : "))
+  demande <- readline(paste0("Voulez-vous enregistrer les donnees elaguees en .csv/n",
+                             "! Attention e ne pas overrun d'anciens fichiers ! (Oui ou Non) : "))
   
   if (tolower(demande) == "oui"){
     write.csv2(SpectreOut, file = paste0(dest,name),row.names = FALSE ) 
@@ -86,7 +86,7 @@ Sauvegarde <- function(){
   }
 }
 #################################################################################
-# Demande à l'utilisateur quels sorties graphiques il veut voir
+# Demande a l'utilisateur quels sorties graphiques il veut voir
 Choix <- function(){
   choix <- readline(paste0("####################################\n",
                            "#     1. Graph with all samples    #\n",
@@ -94,7 +94,7 @@ Choix <- function(){
                            "#     3.Means of  one population   #\n",
                            "#         4.Mean comparison        #\n",
                            "####################################\n",
-                           "Your choice (1,2,3,q to quit): "))
+                           "Your choice (1,2,3,4,q to quit): "))
   
   
   if (choix == "q") {
@@ -104,15 +104,15 @@ Choix <- function(){
   
   else if (choix == 1){
     # GRAPHE ALL SAMPLES
-    titre = paste("Spectre Infrarouge de tous les échantillons")
+    titre = paste("Spectre Infrarouge de tous les echantillons")
     
-    # Absorbance en fonction du NO (dans l'ordre décroissant)
+    # Absorbance en fonction du NO (dans l'ordre decroissant)
     # On groupe et colore par sample
     graph_allsamples = ggplot(SN, aes(x = reorder(NO,desc(NO)), y = Absorbance, group = factor(Sample))) +
       geom_line(aes(color=factor(Sample))) +
       labs(title = titre,
            x = "Nombre d'ondes (1/cm)",
-           y = "Absorbance normalisée")+
+           y = "Absorbance normalisee")+
       scale_x_discrete(breaks = as.integer(NO[seq(1,length(NO),by =15)]))
     
     print(graph_allsamples)
@@ -122,16 +122,16 @@ Choix <- function(){
   else if (choix == 2){
     #GRAPHE MOYENNE DES POPULATIONS
 
-    titre = paste0("Spectre Infrarouge Moyen des différentes populations")
+    titre = paste0("Spectre Infrarouge Moyen des differentes populations")
     
-    # Absorbance en fonction du NO (dans l'ordre décroissant)
+    # Absorbance en fonction du NO (dans l'ordre decroissant)
     # On ne prend que les moyennes
     graphe_moy = ggplot(filter(SN, Echantillon == 0)) +
       aes(x = reorder(NO,desc(NO)), y = Absorbance, group = Population, color = Population) + 
       geom_line() +
       labs(title = titre,
            x = "Nombre d'ondes (1/cm)",
-           y = "Absorbance normalisée")+
+           y = "Absorbance normalisee")+
       scale_x_discrete(breaks = as.integer(NO[seq(1,length(NO),by =15)]))
     
     print(graphe_moy)
@@ -152,7 +152,7 @@ Choix <- function(){
       geom_line() +
       labs(title = titre,
            x = "Nombre d'ondes (1/cm)",
-           y = "Absorbance normalisée")+
+           y = "Absorbance normalisee")+
       scale_x_discrete(breaks = as.integer(NO[seq(1,length(NO),by =15)]))
     
     print(graphe_mean)
@@ -175,7 +175,7 @@ Choix <- function(){
 }
 
 Ttest <- function(){
-  pop1 <- readline(prompt = "Population de référence : ")
+  pop1 <- readline(prompt = "Population de reference : ")
   
   if (!(tolower(pop1) %in% tolower(levels(SN$Population)))) {
     cat("Veuillez rentrer un nom de population qui existe !")
@@ -183,20 +183,20 @@ Ttest <- function(){
   }
   
   #Calcul du t-test
-  # Attention les données ne suivent pas forcément un loi normale centrée réduite (il faut valider par la biologie)
+  # Attention les donnees ne suivent pas forcement un loi normale centree reduite (il faut valider par la biologie)
   else{
     # Degre de liberte pour le controle
     ddlCTRL <-  table(filter(SN, NO == NO[1])$Population)[pop1] - 3
     
     # Effectif du controle
-    effCTRL <-  table(filter(SN, NO == NO[1])$Population)[pop1] - 2 #On prend le nb d'indiv sur la première longueur d'onde et on enlève mean et var
+    effCTRL <-  table(filter(SN, NO == NO[1])$Population)[pop1] - 2 #On prend le nb d'indiv sur la premiere longueur d'onde et on enleve mean et var
     
-    # Moyenne de la population de référence
+    # Moyenne de la population de reference
     MeanCTRL <-  select(filter(SN, Sample == pop1),
                         Absorbance)
     nrow(MeanCTRL)
     
-    # Variance de la population de référence
+    # Variance de la population de reference
     VarCTRL <-  select(filter(SN, Sample == paste(pop1,"var", sep = "-")),
                        Absorbance)
     nrow(VarCTRL)
@@ -254,7 +254,7 @@ Ttest <- function(){
         geom_line() +
         labs(title = titre,
              x = "Nombre d'ondes (1/cm)",
-             y = "Absorbance normalisée")+
+             y = "Absorbance normalisee")+
         theme(legend.position="top",
               legend.title = element_blank(),
               plot.title = element_text(hjust = 0.5))+

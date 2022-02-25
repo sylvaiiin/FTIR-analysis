@@ -55,7 +55,7 @@ if(as.integer( regexpr(".brut", FILE, fixed= TRUE)) !=(-1)) {
   
   #### Stockage des donnees dans un data frame
   
-  # On place la date et la populationen type character et le reste en num�ric
+  # On place la date et la populationen type character et le reste en numeric
   SpectresBruts <-  read.table(FILE,colClasses="character")
   SpectresBruts[,3:ncol(SpectresBruts)] <- apply(SpectresBruts[,3:ncol(SpectresBruts)],2,as.numeric)
   
@@ -65,7 +65,7 @@ if(as.integer( regexpr(".brut", FILE, fixed= TRUE)) !=(-1)) {
   # Creation d'un vecteur comprenant toutes les valeurs de NO possibles
   NO = seq(NOdeb,NOfin,pas)
   
-  # Valeurs de nombre d'onde les plus proches de la fen�tre
+  # Valeurs de nombre d'onde les plus proches de la fenetre
   NOdeb = NO[which.min(abs(NO-debWIN))]
   NOfin = NO[which.min(abs(NO-finWIN))]
   
@@ -73,8 +73,8 @@ if(as.integer( regexpr(".brut", FILE, fixed= TRUE)) !=(-1)) {
   IndexDeb = which.min(abs(NO-debWIN))+3
   IndexFin = which.min(abs(NO-finWIN))+3
   
-  # On recentre les NO autour des valeurs demand�es
-  NO = NO[which(NO==NOdeb):which(NO==NOfin)] #va de 829 � 1801, length = 253
+  # On recentre les NO autour des valeurs demandees
+  NO = NO[which(NO==NOdeb):which(NO==NOfin)] #va de 829 e 1801, length = 253
   
   # Calcul du nombre de NO conserves dans le spectre reduit
   NbNO = length(NO)
@@ -102,16 +102,13 @@ if(as.integer( regexpr(".brut", FILE, fixed= TRUE)) !=(-1)) {
   
   # Reorganistion des spectres normes (ajout des noms et classement de la matrice par alphabetique)
   SpectreNorm <-  cbind(SpectresRed[,1:3],SpectreNorm)
-  # On passe NO en valeurs enti�re pour faciliter les lectures
+  # On passe NO en valeurs entiere pour faciliter les lectures
   colnames(SpectreNorm) <- c("Date", "Population", "Echantillon",as.integer(NO))
   
-  #On rajoute la colonne Sample
+  # On rajoute la colonne Sample
   SpectreNorm <- cbind(SpectreNorm, paste0(SpectreNorm$Population, "-", SpectreNorm$Echantillon))
-  
   SpectreNorm <- SpectreNorm[c(1:3, ncol(SpectreNorm), 4:(ncol(SpectreNorm)-1))]
-  
   colnames(SpectreNorm)[4] <- "Sample"
-  
   SpectreNorm$Population <- as.factor(SpectreNorm$Population)
 }
 
@@ -127,17 +124,17 @@ if (as.integer( regexpr(".csv", FILE, fixed= TRUE)) !=(-1)) {
 ##                Echantillonage               ##
 #################################################
 
-# l est le nombre de populations diff�rentes dans les donnees
+# l est le nombre de populations differentes dans les donnees
 l = length(levels(SpectreNorm$Population))
 
-#Cr�ation d'un nouveau dataframe qui va accueillir les moyennes et les variances par population
+#Creation d'un nouveau dataframe qui va accueillir les moyennes et les variances par population
 # Echantillon = 0 permet de reconnaitre les moyennes
 # Echantillon = 0.5 permet de reconnaitre les variances
 SN <-  data.frame(Date = rep(SpectreNorm[1,1], times = l*2), 
                   Population = factor(rep(levels(SpectreNorm$Population), each = 2)), 
                   Echantillon = rep(c(0,0.5), times = l))
 
-SN <- cbind(SN, Sample = paste0(SN$Population, "-", SN$Echantillon)) #On cr�e un nouveau df
+SN <- cbind(SN, Sample = paste0(SN$Population, "-", SN$Echantillon)) #On cree un nouveau df
 
 #On modifie les samples des moy et var pour les reconnaitre plus facilement ensuite
 SN$Sample[SN$Echantillon == 0] <- as.character(SN$Population[SN$Echantillon == 0])
@@ -165,32 +162,32 @@ SN <- reshape::melt(SN, id.vars = c("Date", "Population", "Echantillon", "Sample
 colnames(SN)[5:6] <- c("NO", "Absorbance")
 
 
-#Passage en facteur pour pouvoir g�rer les r�p�titions du format long
+#Passage en facteur pour pouvoir gerer les repetitions du format long
 SN$NO <- as.factor(SN$NO)
 SN$Sample <- as.factor(SN$Sample)
 
 #Graphiques qui sortent dans Plots
-ncourbe = 3 # Nombre d'�chantillon par graphe (3 est un bon compromis)
+ncourbe = 3 # Nombre d'echantillon par graphe (3 est un bon compromis)
 
 #On parcourt les populations
 for (pop in levels(SN$Population)){
-  # Nombre d'�chantillon d'une population
+  # Nombre d'echantillon d'une population
   #nbechantillon = max(SN$Echantillon[SN$Population == pop])
   nbechantillon = 10
-  # Pour ne pas avoir de pb de range (pour s'arr�ter)
+  # Pour ne pas avoir de pb de range (pour s'arreter)
   if ((nbechantillon + 1) %% 5 == 0) nbechantillon = nbechantillon - 1
   
-  #Liste qui d�termine quels �chantillons sont ensembles
+  #Liste qui determine quels echantillons sont ensembles
   decoupe = seq(1, nbechantillon, by = ncourbe) 
   
   for (i in decoupe){
     #Quand on arrive au bout des echantillons
     if (i == decoupe[length(decoupe)]){
-      titre = paste("Spectre Infrarouge des echantillons", pop, i,"�", nbechantillon, sep = " ")
+      titre = paste("Spectre Infrarouge des echantillons", pop, i,"-", nbechantillon, sep = " ")
     }
     # Sinon
     else {
-      titre = paste("Spectre Infrarouge des echantillons", pop, i,"�", i+ncourbe-1, sep = " ")
+      titre = paste("Spectre Infrarouge des echantillons", pop, i,"-", i+ncourbe-1, sep = " ")
     }
     
     # Sortie graphique
@@ -199,7 +196,7 @@ for (pop in levels(SN$Population)){
       geom_line() +
       labs(title = titre,
            x = "Nombre d'ondes (1/cm)",
-           y = "Absorbance normalis�e")+
+           y = "Absorbance normalisee")+
       scale_x_discrete(breaks = as.integer(NO[seq(1,length(NO),by =15)]))
     print(graphe)
     
@@ -208,14 +205,14 @@ for (pop in levels(SN$Population)){
   }
 }
 
-# Suppression des mauvaises donn�es
+# Suppression des mauvaises donnees
 SN <- Suppression(SN)
 
 #################################################
 ##      ENREGISTREMENT DES DONNEES ELAGUEES    ##
 #################################################
 
-#### Creation d'un fichier csv des donnees elaguees et normalis�e
+#### Creation d'un fichier csv des donnees elaguees et normalisee
 SpectreOut <- reshape(SN, idvar = c("Date", "Population", "Echantillon","Sample"), timevar = "NO", direction = "wide")
 colnames(SpectreOut)[5:dim(SpectreOut)[2]] <- levels(SN$NO)
 SpectreOut <- filter(SpectreOut, Echantillon != 0 & Echantillon !=0.5)
