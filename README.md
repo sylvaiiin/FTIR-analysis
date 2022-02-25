@@ -1,10 +1,6 @@
-# FTIR-analysis
-R scripts for FTIR analysis. 
-This scripts permit selection, analysis and exportation of the FTIR data.
-
+# Scripts for FTIR analysis
 ## How to get started ?
-### Package installations
-Install the following packages if that is not already done
+Install the **following packages** if that is not already done
 - ggplot2
 - dplyr
 - reshape
@@ -12,13 +8,8 @@ Install the following packages if that is not already done
 - stringr
 - fs
 
-### Run DataTreatment_FTIR.R
-Run DataTreatment_FTIR.R to begin the selection and analysis process
-
-### Data type
-This script use **.brut** or **.csv** data coming from FTIR.
-
-### Entry parameters
+Run **DataTreatment_FTIR.R** to begin the selection and analysis process.<br />
+This script use **.brut** or **.csv** data coming from FTIR.<br />
 You can change the entry parameters in **DataTreament_FTIR.R** (line 39 to 50) to suit your needs.
 
 ## What is the scripts doing ?
@@ -36,5 +27,5 @@ The second phase is a phase of analysis of your dataset. you have 4 options to v
 - Graph with the mean spectrum of one population
 - Mean spectrum comparison between two populations using a T-test
 
-
+<br />
 Copyright Urbain Aurelie, Caillaud Sylvain & INRAE
