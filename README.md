@@ -35,3 +35,6 @@ The second phase is a phase of analysis of your dataset. you have 4 options to v
 - Graph with the mean spectrums of population
 - Graph with the mean spectrum of one population
 - Mean spectrum comparison between two populations using a T-test
+
+
+Copyright Urbain Aurelie, Caillaud Sylvain & INRAE
